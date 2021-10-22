@@ -1,0 +1,62 @@
+// @import "~@fortawesome/fontawesome-free-webfonts/scss/fontawesome";
+// @import "~@fortawesome/fontawesome-free-webfonts/scss/fa-solid";
+// @import "~@fortawesome/fontawesome-free-webfonts/scss/fa-regular";
+
+@tailwind preflight;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, Oxygen, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+}
+
+.wttj_fullstack-app {
+  @apply fixed pin-t pin-l w-full h-full;
+  padding-top: 3rem;
+
+  .navbar {
+    @apply absolute h-12 w-full pin-t pin-l flex items-center text-white px-4;
+    background-color: #3dd095;
+
+    .brand {
+      @apply font-bold;
+    }
+  }
+
+  .wttj_fullstack-wrapper {
+    display: flex;
+    padding: 25px;
+    align-items: flex-start;
+    overflow: scroll;
+    height: 100%;
+  }
+}
+
+.wttj_fullstack-list {
+  @apply  mr-6 ;
+  min-width: 24rem;
+
+  .wttj_fullstack-list-header {
+    @apply mt-0 p-4;
+  }
+
+  .wttj_fullstack-list-wrapper {
+    @apply pb-2;
+    min-height: 50px;
+    outline: none;
+  }
+
+  .wttj_fullstack-list-card-wrapper {
+    .wttj_fullstack-list-card {
+      background-color: rgb(189, 189, 189);
+    }
+
+    &.draggable-mirror {
+      .wttj_fullstack-list-card {
+        transform: rotate(5deg) !important;
+        @apply bg-grey-lighter;
+      }
+    }
+  }
+}
