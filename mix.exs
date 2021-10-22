@@ -46,7 +46,9 @@ defmodule WttjFullstack.Mixfile do
       {:cowboy, "~> 1.0"},
       {:distillery, "~> 1.5"},
       {:hackney, "~> 1.14.0"},
-      {:certifi, "~> 2.4.2"}
+      {:certifi, "~> 2.4.2"},
+      {:mime, "~> 1.0"},
+      {:plug_cowboy, "~> 1.0"},
     ]
   end
 
