@@ -66,6 +66,6 @@ export default class App extends React.Component {
 
 App.propTypes = {
   loadCandidacies: PropTypes.func.isRequired,
-  loadingCandidacies: PropTypes.number.isRequired,
+  loadingCandidacies: PropTypes.func.isRequired,
   updateCandidacy: PropTypes.func.isRequired,
 };

@@ -10,7 +10,7 @@ defmodule WttjFullstackWeb.CandidacyView do
   def render("candidacy.json", %{candidacy: candidacy}) do
     %{
       candidacy: %{
-        id: candidacy.id,
+        id: to_string(candidacy.id),
         email: candidacy.email,
         state: candidacy.state,
         position: candidacy.position

@@ -16,7 +16,7 @@ export default function Avatar(props) {
 Avatar.propTypes = {
   candidacy: PropTypes.shape({
     email: PropTypes.string.isRequired,
-    id: PropTypes.number.isRequired,
+    id: PropTypes.string.isRequired,
     state: PropTypes.string.isRequired,
   }).isRequired,
 };

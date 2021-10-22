@@ -45,8 +45,8 @@ export default class List extends React.Component {
             groupName="wttj_fullstack-lists"
             dragClass="draggable-mirror"
           >
-            {this.props.candidacies.map((candidacy) => (
-              <ListCard candidacy={candidacy} />
+            {this.props.candidacies.map((candidacy, key) => (
+              <ListCard key={key} candidacy={candidacy} />
             ))}
           </Container>
         </div>
@@ -64,7 +64,7 @@ List.propTypes = {
     PropTypes.shape({
       email: PropTypes.string.isRequired,
       id: PropTypes.string.isRequired,
-      position: PropTypes.string.isRequired,
+      position: PropTypes.number.isRequired,
     })
   ).isRequired,
   updateCandidacy: PropTypes.func.isRequired,

@@ -9,7 +9,7 @@ defmodule WttjFullstackWeb.JobView do
 
   def render("job.json", %{job: job}) do
     %{
-      id: job.id,
+      id: to_string(job.id),
       name: job.name
     }
   end
