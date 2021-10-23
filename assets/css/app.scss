@@ -12,6 +12,8 @@ body {
 }
 
 .wttj_fullstack-app {
+  background-color: #e6e6e6;
+
   @apply fixed pin-t pin-l w-full h-full;
   padding-top: 3rem;
 
@@ -37,19 +39,41 @@ body {
   @apply  mr-6 ;
   min-width: 24rem;
 
+  background-color: #ffffff;
+  border-radius: 5px;
+  box-shadow: #888 0px 0px 2px;
+
   .wttj_fullstack-list-header {
     @apply mt-0 p-4;
+    box-shadow: rgb(201, 201, 201) 0px 1px 0px;
+    text-transform: uppercase;
+
+    span {
+      background-color: rgb(91, 145, 245);
+      // padding: 0.5rem;
+      display: inline-flex;
+      height: 30px;
+      width: 30px;
+      border-radius: 50%;
+
+      color: white;
+
+      justify-content: center;
+      align-items: center;
+    }
   }
 
   .wttj_fullstack-list-wrapper {
-    @apply pb-2;
+    @apply py-2;
     min-height: 50px;
     outline: none;
   }
 
   .wttj_fullstack-list-card-wrapper {
     .wttj_fullstack-list-card {
-      background-color: rgb(189, 189, 189);
+      border-radius: 5px;
+      padding: 0.75rem;
+      box-shadow: #888 0px 0px 2px;
     }
 
     &.draggable-mirror {

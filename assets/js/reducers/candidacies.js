@@ -44,7 +44,7 @@ export default function candidacies(state = initialState, action) {
       let candidacy = Object.values(state.lists).flat().find((c) => c.id === action.id);
 
       if (candidacy.state === action.newState && candidacy.position === action.newPos) {
-        return;
+        return state;
       }
 
       let oldStateList = state.lists[candidacy.state];

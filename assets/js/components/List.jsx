@@ -40,7 +40,7 @@ export default class List extends React.Component {
           <span
             className=" ml-4"
           >
-            3
+            {this.props.candidacies.length}
           </span>
         </h4>
         <div
