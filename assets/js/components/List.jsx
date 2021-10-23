@@ -18,17 +18,14 @@ export default class List extends React.Component {
 
     if (newPos === null || newPos === oldPos) return;
 
-    // let newCandidacy = {
-    //   ...candidacy,
-    //   state: newState,
-    //   position: newPos,
-    // };
+    let newCandidacy = {
+      ...candidacy,
+      state: newState,
+      position: newPos,
+    };
 
-    // axios.put(`/api/job/${candidacy.jobId}/candidacy/${candidacy.id}`, newCandidacy).then((response) => {
-      this.props.moveCandidacy(candidacy, candidacy.state, newState, newPos);
-    // }).catch((error) => {
-    //   console.log(error);
-    // });
+    this.props.moveCandidacy(candidacy, candidacy.state, newState, newPos);
+    axios.put(`/api/job/${candidacy.jobId}/candidacy/${candidacy.id}`, newCandidacy);
   }
 
   getChildPayload(index) {
