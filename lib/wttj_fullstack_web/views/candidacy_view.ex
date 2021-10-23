@@ -3,7 +3,10 @@ defmodule WttjFullstackWeb.CandidacyView do
 
   def render("candidacies.json", %{candidacies: candidacies}) do
     %{
-      candidacies: render_many(candidacies, __MODULE__, "candidacy.json")
+      candidacies:
+        candidacies
+        |> Enum.sort_by(& &1.position)
+        |> render_many(__MODULE__, "candidacy.json")
     }
   end
 

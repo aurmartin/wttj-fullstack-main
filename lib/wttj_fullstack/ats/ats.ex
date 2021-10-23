@@ -162,9 +162,24 @@ defmodule WttjFullstack.Ats do
 
   """
   def update_candidacy(%Candidacy{} = candidacy, attrs) do
-    candidacy
-    |> Candidacy.changeset(attrs)
-    |> Repo.update()
+    changeset = Candidacy.changeset(candidacy, attrs)
+
+    if changeset.changes[:position] || changeset.changes[:state] do
+      Repo.transaction(fn ->
+        candidacies = Repo.all(Ecto.Query.from c in WttjFullstack.Ats.Candidacy, where: c.job_id == ^candidacy.job_id)
+        candidacies = Candidacy.move_candidacy(
+          candidacies,
+          candidacy,
+          Ecto.Changeset.get_field(changeset, :position),
+          Ecto.Changeset.get_field(changeset, :state)
+        )
+
+        Enum.each(candidacies, & Repo.update!(&1))
+        Repo.update!(changeset)
+      end)
+    else
+      Repo.update(changeset)
+    end
   end
 
   @doc """
