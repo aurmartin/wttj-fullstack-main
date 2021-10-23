@@ -3,24 +3,16 @@ import { orderBy } from "lodash";
 
 import List from "../components/List";
 import {
-  updateCandidacy,
+  moveCandidacy,
 } from "../actions/";
 
-/* Here state refers to list state and not redux */
-function filterCandidacies(candidacies, state) {
-  return orderBy(
-    candidacies.filter((candidacy) => candidacy.state === state),
-    ["position"]
-  );
-}
-
 const mapStateToProps = (state, ownProp) => ({
-  candidacies: filterCandidacies(state.candidacies.items, ownProp.list.state),
+  candidacies: orderBy(state.candidacies.lists[ownProp.list.state] || [], ["position"]),
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  updateCandidacy: (id, newState, newPosition, persist) =>
-    dispatch(updateCandidacy(id, newState, newPosition, persist)),
+  moveCandidacy: (candidacy, oldState, newState, newPos) =>
+    dispatch(moveCandidacy(candidacy, oldState, newState, newPos)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(List);

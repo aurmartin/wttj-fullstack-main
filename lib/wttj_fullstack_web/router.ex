@@ -21,7 +21,7 @@ defmodule WttjFullstackWeb.Router do
   scope "/api", WttjFullstackWeb do
     pipe_through(:api)
 
-    resources("/job", JobController, only: []) do
+    resources("/job", JobController, only: [:index]) do
       resources("/candidacy", CandidacyController, only: [:index, :update])
     end
   end

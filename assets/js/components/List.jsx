@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React from "react";
 import PropTypes from "prop-types";
 import { Container } from "react-smooth-dnd";
@@ -13,9 +14,21 @@ export default class List extends React.Component {
   }
 
   onDrop(newState, event) {
-    const { addedIndex, removedIndex, payload } = event;
-    let newPos = addedIndex
-    if (typeof newPos === "number") this.props.updateCandidacy(payload.id, newState, newPos, true);
+    const { addedIndex: newPos, removedIndex: oldPos, payload: candidacy } = event;
+
+    if (newPos === null || newPos === oldPos) return;
+
+    // let newCandidacy = {
+    //   ...candidacy,
+    //   state: newState,
+    //   position: newPos,
+    // };
+
+    // axios.put(`/api/job/${candidacy.jobId}/candidacy/${candidacy.id}`, newCandidacy).then((response) => {
+      this.props.moveCandidacy(candidacy, candidacy.state, newState, newPos);
+    // }).catch((error) => {
+    //   console.log(error);
+    // });
   }
 
   getChildPayload(index) {
@@ -67,5 +80,5 @@ List.propTypes = {
       position: PropTypes.number.isRequired,
     })
   ).isRequired,
-  updateCandidacy: PropTypes.func.isRequired,
+  moveCandidacy: PropTypes.func.isRequired,
 };

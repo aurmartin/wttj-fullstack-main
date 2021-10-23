@@ -17,14 +17,24 @@ const LISTS = [
 
 export default class App extends React.Component {
   componentDidMount() {
+    console.log("APP --- componentDidMount")
     this.props.loadingCandidacies(true);
     setTimeout(() => {
-      // Temporary workaround to be sure that safari doesn't load from cache.
-      axios.get(`/api/job/1/candidacy?_=${Math.floor(new Date() / 1000)}`).then((response) => {
-        this.props.loadCandidacies(response.data.candidacies);
-        this.props.loadingCandidacies(false);
-      }).catch(() => {
-        this.props.loadingCandidacies(false);
+      axios.get(`/api/job?_=${Math.floor(new Date() / 1000)}`).then((response) => {
+        this.props.loadJobs(response.data.jobs);
+
+        if (response.data.jobs.length > 0) {
+          let selectedJob = response.data.jobs[0];
+          this.props.selectJob(selectedJob);
+
+          // Temporary workaround to be sure that safari doesn't load from cache.
+          axios.get(`/api/job/${selectedJob.id}/candidacy?_=${Math.floor(new Date() / 1000)}`).then((response) => {
+            this.props.loadCandidacies(response.data.candidacies);
+            this.props.loadingCandidacies(false);
+          }).catch(() => {
+            this.props.loadingCandidacies(false);
+          });
+        }
       });
     });
 
@@ -49,6 +59,7 @@ export default class App extends React.Component {
   }
 
   render() {
+    console.log("APP --- render")
     return (
       <div className="wttj_fullstack-app">
         <div className="navbar">

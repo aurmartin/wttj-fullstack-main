@@ -1,4 +1,3 @@
-import axios from 'axios';
 import {
   MOVE_CANDIDACY,
   LOAD_CANDIDACIES,
@@ -6,9 +5,11 @@ import {
   UPDATE_CANDIDACY,
 } from '../actions';
 
+import { groupBy, mapValues } from 'lodash';
+
 const initialState = {
   loading: false,
-  items: [],
+  lists: {},
 };
 
 function setCandidacy(state, action) {
@@ -19,14 +20,6 @@ function setCandidacy(state, action) {
     state: action.newState,
     position: action.newPos,
   };
-
-  if (action.persist) {
-    axios.put(`/api/job/1/candidacy/${candidacy.id}`, candidacy).then((response) => {
-      console.log(response);
-    }).catch((error) => {
-      console.log(error);
-    });
-  }
 
   return Object.assign({}, state, {
     items: [
@@ -42,21 +35,31 @@ export default function candidacies(state = initialState, action) {
       return { ...state, loading: action.val };
 
     case LOAD_CANDIDACIES:
-      return Object.assign({}, state, {
-        items: action.candidacies,
-      });
+      return {
+        ...state,
+        lists: mapValues(groupBy(action.candidacies, "state"), (list) => list.map((x, i) => ({ ...x, position: i })))
+      };
 
     case MOVE_CANDIDACY:
-      return Object.assign({}, state, {
-        items: state.items.map((candidacy) => {
-          if (candidacy.id === action.id) {
-            return Object.assign({}, candidacy, {
-              state: action.candidacyState,
-            });
-          }
-          return candidacy;
-        }),
-      });
+      let oldStateList = state.lists[action.oldState];
+      let newStateList = state.lists[action.newState] || [];
+
+      // Remove candidacy from old list
+      oldStateList.splice(action.candidacy.position, 1);
+
+      let updatedCandidacy = { ...action.candidacy, state: action.newState };
+
+      // Insert updatedCandidacy into new list at dropped on position (newPos)
+      newStateList.splice(action.newPos, 0, updatedCandidacy);
+
+      return {
+        ...state,
+        lists: {
+          ...state.lists,
+          [action.oldState]: oldStateList.map((x, i) => ({ ...x, position: i })),
+          [action.newState]: newStateList.map((x, i) => ({ ...x, position: i })),
+        }
+      };
 
     case UPDATE_CANDIDACY:
       return setCandidacy(state, action);
