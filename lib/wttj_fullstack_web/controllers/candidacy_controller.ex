@@ -16,8 +16,15 @@ defmodule WttjFullstackWeb.CandidacyController do
     candidacy = Ats.get_candidacy!(id)
 
     case Ats.update_candidacy(candidacy, params) do
-      {:ok, %Candidacy{} = candidacy} ->
-        render(conn, "candidacy.json", candidacy: candidacy)
+      {:ok, %Candidacy{} = newCandidacy} ->
+        message = %{
+          id: id,
+          newPos: newCandidacy.position,
+          newState: newCandidacy.state,
+        }
+
+        WttjFullstackWeb.Endpoint.broadcast("job:#{candidacy.job_id}", "card:update", message)
+        render(conn, "candidacy.json", candidacy: newCandidacy)
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "error.json", changeset: changeset)

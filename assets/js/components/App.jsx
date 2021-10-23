@@ -17,7 +17,6 @@ const LISTS = [
 
 export default class App extends React.Component {
   componentDidMount() {
-    console.log("APP --- componentDidMount")
     this.props.loadingCandidacies(true);
     setTimeout(() => {
       axios.get(`/api/job?_=${Math.floor(new Date() / 1000)}`).then((response) => {
@@ -53,13 +52,12 @@ export default class App extends React.Component {
       console.log('Unable to join', resp);
     });
 
-    channel.on('card:update', (candidacy) => {
-      this.props.updateCandidacy(candidacy.id, candidacy.state, candidacy.position, false);
+    channel.on('card:update', (update) => {
+      this.props.moveCandidacy(update.id, update.newState, update.newPos);
     });
   }
 
   render() {
-    console.log("APP --- render")
     return (
       <div className="wttj_fullstack-app">
         <div className="navbar">
@@ -78,5 +76,5 @@ export default class App extends React.Component {
 App.propTypes = {
   loadCandidacies: PropTypes.func.isRequired,
   loadingCandidacies: PropTypes.func.isRequired,
-  updateCandidacy: PropTypes.func.isRequired,
+  moveCandidacy: PropTypes.func.isRequired,
 };

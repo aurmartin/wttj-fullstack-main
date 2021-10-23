@@ -1,6 +1,8 @@
 defmodule WttjFullstackWeb.UserSocket do
   use Phoenix.Socket
 
+  channel("job:*", WttjFullstackWeb.JobChannel)
+
   ## Transports
   transport(:websocket, Phoenix.Transports.WebSocket)
   # transport :longpoll, Phoenix.Transports.LongPoll

@@ -41,13 +41,19 @@ export default function candidacies(state = initialState, action) {
       };
 
     case MOVE_CANDIDACY:
-      let oldStateList = state.lists[action.oldState];
+      let candidacy = Object.values(state.lists).flat().find((c) => c.id === action.id);
+
+      if (candidacy.state === action.newState && candidacy.position === action.newPos) {
+        return;
+      }
+
+      let oldStateList = state.lists[candidacy.state];
       let newStateList = state.lists[action.newState] || [];
 
       // Remove candidacy from old list
-      oldStateList.splice(action.candidacy.position, 1);
+      oldStateList.splice(candidacy.position, 1);
 
-      let updatedCandidacy = { ...action.candidacy, state: action.newState };
+      let updatedCandidacy = { ...candidacy, state: action.newState };
 
       // Insert updatedCandidacy into new list at dropped on position (newPos)
       newStateList.splice(action.newPos, 0, updatedCandidacy);

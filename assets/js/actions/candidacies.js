@@ -6,8 +6,8 @@ export const LOADED_CANDIDACIES_SUCCESS = 'LOADED_CANDIDACIES_SUCCESS';
 export const LOADED_CANDIDACIES_ERROR = 'LOADED_CANDIDACIES_ERROR';
 export const UPDATE_CANDIDACY = 'UPDATE_CANDIDACY';
 
-export function moveCandidacy(candidacy, oldState, newState, newPos) {
-  return { type: MOVE_CANDIDACY, candidacy, oldState, newState, newPos };
+export function moveCandidacy(id, newState, newPos) {
+  return { type: MOVE_CANDIDACY, id, newState, newPos };
 }
 
 export function loadingCandidacies(val) {

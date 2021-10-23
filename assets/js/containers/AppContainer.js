@@ -3,7 +3,7 @@ import App from "../components/App";
 import {
   loadCandidacies,
   loadingCandidacies,
-  updateCandidacy,
+  moveCandidacy,
   loadJobs,
   selectJob,
 } from "../actions/";
@@ -14,8 +14,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   loadCandidacies: (candidacies) => dispatch(loadCandidacies(candidacies)),
   loadingCandidacies: (val) => dispatch(loadingCandidacies(val)),
-  updateCandidacy: (id, newState, newPosition, persist) =>
-    dispatch(updateCandidacy(id, newState, newPosition, persist)),
+  moveCandidacy: (id, newState, newPosition) => dispatch(moveCandidacy(id, newState, newPosition)),
   loadJobs: (jobs) => dispatch(loadJobs(jobs)),
   selectJob: (job) => dispatch(selectJob(job)),
 });

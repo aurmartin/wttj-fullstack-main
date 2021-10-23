@@ -24,7 +24,7 @@ export default class List extends React.Component {
       position: newPos,
     };
 
-    this.props.moveCandidacy(candidacy, candidacy.state, newState, newPos);
+    this.props.moveCandidacy(candidacy.id, newState, newPos);
     axios.put(`/api/job/${candidacy.jobId}/candidacy/${candidacy.id}`, newCandidacy);
   }
 

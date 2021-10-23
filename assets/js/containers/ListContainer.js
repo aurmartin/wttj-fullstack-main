@@ -11,8 +11,7 @@ const mapStateToProps = (state, ownProp) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  moveCandidacy: (candidacy, oldState, newState, newPos) =>
-    dispatch(moveCandidacy(candidacy, oldState, newState, newPos)),
+  moveCandidacy: (candidacy, newState, newPos) => dispatch(moveCandidacy(candidacy, newState, newPos)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(List);
