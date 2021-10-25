@@ -25,4 +25,10 @@ defmodule WttjFullstackWeb.Router do
       resources("/candidacy", CandidacyController, only: [:index, :update])
     end
   end
+
+  scope "/test", WttjFullstackWeb do
+    pipe_through(:api)
+
+    resources("/db", TestDbController, only: [:create])
+  end
 end

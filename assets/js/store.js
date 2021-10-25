@@ -5,4 +5,4 @@ import reducer from './reducers';
 
 const middleware = applyMiddleware(thunk);
 
-export default createStore(reducer, compose(middleware, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()));
+export default createStore(reducer, compose(middleware, window.__REDUX_DEVTOOLS_EXTENSION__ ? window.__REDUX_DEVTOOLS_EXTENSION__() : x => x));
