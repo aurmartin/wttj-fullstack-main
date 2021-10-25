@@ -1,6 +1,8 @@
 defmodule WttjFullstack.Application do
   use Application
 
+  require Logger
+
   # See https://hexdocs.pm/elixir/Application.html
   # for more information on OTP Applications
   def start(_type, _args) do
@@ -19,6 +21,8 @@ defmodule WttjFullstack.Application do
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
     opts = [strategy: :one_for_one, name: WttjFullstack.Supervisor]
+
+    Logger.info("[#{__MODULE__}] Starting #{inspect(children, pretty: true)}")
     Supervisor.start_link(children, opts)
   end
 
