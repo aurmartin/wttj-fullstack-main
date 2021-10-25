@@ -74,6 +74,11 @@ body {
       border-radius: 5px;
       padding: 0.75rem;
       box-shadow: #888 0px 0px 2px;
+      cursor: pointer;
+
+      &:hover {
+        background-color: darken($color: white, $amount: 3);
+      }
     }
 
     &.draggable-mirror {

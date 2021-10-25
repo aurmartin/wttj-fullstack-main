@@ -2,8 +2,8 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Draggable } from "react-smooth-dnd";
 
+import { STATE_TO_NAME } from '../constants';
 import Avatar from "./Avatar";
-
 export default function ListCard(props) {
   return (
     <Draggable key={props.candidacy.id}>
@@ -14,7 +14,7 @@ export default function ListCard(props) {
               <Avatar candidacy={props.candidacy} />
               <div className="ml-4">
                 <p className="mb-3">{props.candidacy.email}</p>
-                <p >{props.candidacy.state}</p>
+                <p >{STATE_TO_NAME[props.candidacy.state]}</p>
               </div>
             </div>
           </div>

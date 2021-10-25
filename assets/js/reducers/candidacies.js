@@ -62,7 +62,7 @@ export default function candidacies(state = initialState, action) {
         ...state,
         lists: {
           ...state.lists,
-          [action.oldState]: oldStateList.map((x, i) => ({ ...x, position: i })),
+          [candidacy.state]: oldStateList.map((x, i) => ({ ...x, position: i })),
           [action.newState]: newStateList.map((x, i) => ({ ...x, position: i })),
         }
       };

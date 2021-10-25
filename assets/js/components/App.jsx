@@ -5,15 +5,8 @@ import axios from 'axios';
 import PropTypes from 'prop-types';
 import { Socket } from 'phoenix';
 
+import { LISTS } from '../constants';
 import ListContainer from '../containers/ListContainer';
-
-const LISTS = [
-  { state: 'new', name: 'Nouveau' },
-  { state: 'refused', name: 'Refusé' },
-  { state: 'to_meet', name: 'A rencontrer' },
-  { state: 'interview', name: 'Entretien' },
-  { state: 'accepter', name: 'Accepté' },
-];
 
 export default class App extends React.Component {
   componentDidMount() {
