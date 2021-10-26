@@ -6,23 +6,11 @@ networks:
 
 services:
   app:
-    image: wttj_fullstack:0.1.0
-    build:
-      context: .
-      args:
-        - SECRET_KEY_BASE=${SECRET_KEY_BASE}
-        - DATABASE_NAME=${DATABASE_NAME}
-        - DATABASE_USERNAME=${DATABASE_USERNAME}
-        - DATABASE_PASSWORD=${DATABASE_PASSWORD}
-        - DATABASE_HOST=db
+    image: 705111241922.dkr.ecr.eu-west-3.amazonaws.com/my-ecr:${CIRCLE_SHA1}
     environment:
-      - SECRET_KEY_BASE=${SECRET_KEY_BASE}
-      - DATABASE_NAME=${DATABASE_NAME}
-      - DATABASE_USERNAME=${DATABASE_USERNAME}
-      - DATABASE_PASSWORD=${DATABASE_PASSWORD}
       - DATABASE_HOST=db
     ports:
-      - 4000:4000
+      - 80:4000
     depends_on:
       - db
 

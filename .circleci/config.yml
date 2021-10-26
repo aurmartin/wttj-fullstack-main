@@ -1,9 +1,14 @@
 version: 2.1
 
 workflows:
-  build:
+  build_and_deploy:
     jobs:
       - build:
+          context:
+            - preprod
+      - deploy:
+          requires:
+            - build
           context:
             - preprod
 
@@ -11,44 +16,78 @@ jobs:
   build:
     working_directory: /app
     docker:
-      - image: docker:17.05.0-ce-git
+      - image: docker:20.10.8-git
     steps:
       - checkout
       - setup_remote_docker
       - run:
           name: Install dependencies
           command: |
-              apk add --no-cache py-pip=9.0.0-r1
-              pip install docker-compose==1.12.0 awscli==1.11.76
-      - restore_cache:
-          keys:
-            - v1-{{ .Branch }}
-          paths:
-            - /caches/app.tar
+              apk add --no-cache py-pip
+              pip install awscli
       - run:
-          name: Load Docker image layer cache
+          name: AWS Setup
           command: |
-            set +o pipefail
-            docker load -i /caches/app.tar | true
+              aws configure set aws_access_key_id ${AWS_ACCESS_KEY_ID}
+              aws configure set aws_secret_access_key ${AWS_SECRET_ACCESS_KEY}
+              aws ecr get-login-password --region eu-west-3 | docker login --username AWS --password-stdin 705111241922.dkr.ecr.eu-west-3.amazonaws.com
+      # - restore_cache:
+      #     keys:
+      #       - v1-{{ .Branch }}
+      # - run:
+      #     name: Load Docker image layer cache
+      #     command: |
+      #       set +o pipefail
+      #       docker load -i /caches/app.tar | true
       - run:
-            name: Build application Docker image
-            command: |
-              docker build --build-arg SECRET_KEY_BASE --build-arg DATABASE_HOST=db --build-arg DATABASE_NAME --build-arg DATABASE_USERNAME --build-arg DATABASE_PASSWORD --cache-from=app -t app .
+          name: Build application Docker image
+          command: |
+            docker build --build-arg SECRET_KEY_BASE --build-arg DATABASE_HOST=db --build-arg DATABASE_NAME --build-arg DATABASE_USERNAME --build-arg DATABASE_PASSWORD --cache-from=app -t app .
+      # - run:
+      #     name: Save Docker image layer cache
+      #     command: |
+      #       mkdir -p /caches
+      #       docker save -o /caches/app.tar app
+      # - save_cache:
+      #     key: v1-{{ .Branch }}
+      #     paths:
+      #       - /caches/app.tar
       - run:
-            name: Save Docker image layer cache
-            command: |
-              mkdir -p /caches
-              docker save -o /caches/app.tar app
-      - save_cache:
-            key: v1-{{ .Branch }}-{{ epoch }}
-            paths:
-              - /caches/app.tar
-      - deploy:
             name: Push application Docker image
             command: |
-              if [ "${CIRCLE_BRANCH}" == "master" ]; then
-                login="$(aws ecr get-login)"
-                ${login}
-                docker tag app "${ECR_ENDPOINT}/app:${CIRCLE_SHA1}"
-                docker push "${ECR_ENDPOINT}/app:${CIRCLE_SHA1}"
-              fi
+              docker tag app "705111241922.dkr.ecr.eu-west-3.amazonaws.com/my-ecr:${CIRCLE_SHA1}"
+              docker push "705111241922.dkr.ecr.eu-west-3.amazonaws.com/my-ecr:${CIRCLE_SHA1}"
+
+  deploy:
+    docker:
+      - image: docker:20.10.8-git
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Install dependencies
+          command: |
+              apk add --no-cache py-pip
+              pip install awscli
+      - run:
+          name: AWS Setup
+          command: |
+              aws configure set aws_access_key_id ${AWS_ACCESS_KEY_ID}
+              aws configure set aws_secret_access_key ${AWS_SECRET_ACCESS_KEY}
+              aws configure set default.region eu-west-3
+              aws ecr get-login-password --region eu-west-3 | docker login --username AWS --password-stdin 705111241922.dkr.ecr.eu-west-3.amazonaws.com
+      - deploy:
+          name: Deploy Docker image to EC2
+          command: |
+            ssh-keygen -b 2048 -t rsa -N "" -f ./ssh_key
+            aws ec2-instance-connect send-ssh-public-key --instance-id i-05516e0197cd7e189 --ssh-public-key file://./ssh_key.pub --instance-os-user root --availability-zone eu-west-3b > /dev/null
+            ssh-keyscan -t rsa 13.37.229.106 > ~/.ssh/known_hosts
+            scp -i ./ssh_key ./deploy.sh root@13.37.229.106:/root/deploy.sh
+            ssh -i ./ssh_key root@13.37.229.106 "
+              echo CIRCLE_SHA1=$CIRCLE_SHA1 > .env
+              echo DATABASE_NAME=$DATABASE_NAME >> .env
+              echo DATABASE_USERNAME=$DATABASE_USERNAME >> .env
+              echo DATABASE_PASSWORD=$DATABASE_PASSWORD >> .env
+              echo SECRET_KEY_BASE=$SECRET_KEY_BASE >> .env
+              sh deploy.sh
+            "

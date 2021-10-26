@@ -19,8 +19,8 @@ end
 # which you typically run after static files are built.
 config :wttj_fullstack, WttjFullstackWeb.Endpoint,
   http: [ip: {0, 0, 0, 0}, port: 4000],
-  url: [scheme: "https", host: "wttj_fullstack.stephanerobino.com"],
-  force_ssl: [rewrite_on: [:x_forwarded_proto]],
+  url: [scheme: "http", host: "ec2-13-37-229-106.eu-west-3.compute.amazonaws.com"],
+  # force_ssl: [rewrite_on: [:x_forwarded_proto]],
   cache_static_manifest: "priv/static/cache_manifest.json",
   secret_key_base: from_env.("SECRET_KEY_BASE"),
   server: true
